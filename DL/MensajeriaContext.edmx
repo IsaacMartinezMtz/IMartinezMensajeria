@@ -1,0 +1,496 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MensajeriaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Conversacion">
+          <Key>
+            <PropertyRef Name="IdConversacion" />
+          </Key>
+          <Property Name="IdConversacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdReceptor" Type="int" />
+          <Property Name="IdEmisor" Type="int" />
+        </EntityType>
+        <EntityType Name="Envio">
+          <Key>
+            <PropertyRef Name="IdEnvio" />
+          </Key>
+          <Property Name="IdEnvio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdMensaje" Type="int" />
+          <Property Name="IdConversacion" Type="int" />
+          <Property Name="Emisor" Type="int" />
+          <Property Name="Receptor" Type="int" />
+        </EntityType>
+        <EntityType Name="Mensaje">
+          <Key>
+            <PropertyRef Name="IdMensaje" />
+          </Key>
+          <Property Name="IdMensaje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Mensaje" Type="varchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="varchar" MaxLength="80" />
+          <Property Name="Email" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="80" />
+        </EntityType>
+        <Association Name="FK__Conversac__IdEmi__1367E606">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Conversacion" Type="Self.Conversacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Conversacion">
+              <PropertyRef Name="IdEmisor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Conversac__IdRec__1273C1CD">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Conversacion" Type="Self.Conversacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Conversacion">
+              <PropertyRef Name="IdReceptor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Envio__Emisor__1B0907CE">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Envio" Type="Self.Envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Envio">
+              <PropertyRef Name="Emisor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Envio__IdConvers__1A14E395">
+          <End Role="Conversacion" Type="Self.Conversacion" Multiplicity="0..1" />
+          <End Role="Envio" Type="Self.Envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversacion">
+              <PropertyRef Name="IdConversacion" />
+            </Principal>
+            <Dependent Role="Envio">
+              <PropertyRef Name="IdConversacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Envio__IdMensaje__1920BF5C">
+          <End Role="Mensaje" Type="Self.Mensaje" Multiplicity="0..1" />
+          <End Role="Envio" Type="Self.Envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mensaje">
+              <PropertyRef Name="IdMensaje" />
+            </Principal>
+            <Dependent Role="Envio">
+              <PropertyRef Name="IdMensaje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Envio__Receptor__1BFD2C07">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Envio" Type="Self.Envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Envio">
+              <PropertyRef Name="Receptor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddConversacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdReceptor" Type="int" Mode="In" />
+          <Parameter Name="IdEmisor" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AddMensaje" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Mensaje" Type="varchar" Mode="In" />
+          <Parameter Name="UltimoMensaje" Type="int" Mode="In" />
+          <Parameter Name="IdEmisor" Type="int" Mode="In" />
+          <Parameter Name="IdReceptor" Type="int" Mode="In" />
+          <Parameter Name="IdConversacion" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AddUsusario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="ApellidoPaterno" Type="varchar" Mode="In" />
+          <Parameter Name="ApellidoMaterno" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="BusquedaUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Usuario" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetByIdConversacioEnvios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdConversacion" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetByIdConversacionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdUsuario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="MensajeriaModelStoreContainer">
+          <EntitySet Name="Conversacion" EntityType="Self.Conversacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Envio" EntityType="Self.Envio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mensaje" EntityType="Self.Mensaje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Conversac__IdEmi__1367E606" Association="Self.FK__Conversac__IdEmi__1367E606">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Conversacion" EntitySet="Conversacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Conversac__IdRec__1273C1CD" Association="Self.FK__Conversac__IdRec__1273C1CD">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Conversacion" EntitySet="Conversacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Envio__Emisor__1B0907CE" Association="Self.FK__Envio__Emisor__1B0907CE">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Envio" EntitySet="Envio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Envio__IdConvers__1A14E395" Association="Self.FK__Envio__IdConvers__1A14E395">
+            <End Role="Conversacion" EntitySet="Conversacion" />
+            <End Role="Envio" EntitySet="Envio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Envio__IdMensaje__1920BF5C" Association="Self.FK__Envio__IdMensaje__1920BF5C">
+            <End Role="Mensaje" EntitySet="Mensaje" />
+            <End Role="Envio" EntitySet="Envio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Envio__Receptor__1BFD2C07" Association="Self.FK__Envio__Receptor__1BFD2C07">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Envio" EntitySet="Envio" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MensajeriaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Conversacion">
+          <Key>
+            <PropertyRef Name="IdConversacion" />
+          </Key>
+          <Property Name="IdConversacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdReceptor" Type="Int32" />
+          <Property Name="IdEmisor" Type="Int32" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Conversac__IdEmi__1367E606" FromRole="Conversacion" ToRole="Usuario" />
+          <NavigationProperty Name="Usuario1" Relationship="Self.FK__Conversac__IdRec__1273C1CD" FromRole="Conversacion" ToRole="Usuario" />
+          <NavigationProperty Name="Envios" Relationship="Self.FK__Envio__IdConvers__1A14E395" FromRole="Conversacion" ToRole="Envio" />
+        </EntityType>
+        <EntityType Name="Envio">
+          <Key>
+            <PropertyRef Name="IdEnvio" />
+          </Key>
+          <Property Name="IdEnvio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdMensaje" Type="Int32" />
+          <Property Name="IdConversacion" Type="Int32" />
+          <Property Name="Emisor" Type="Int32" />
+          <Property Name="Receptor" Type="Int32" />
+          <NavigationProperty Name="Conversacion" Relationship="Self.FK__Envio__IdConvers__1A14E395" FromRole="Envio" ToRole="Conversacion" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Envio__Emisor__1B0907CE" FromRole="Envio" ToRole="Usuario" />
+          <NavigationProperty Name="Mensaje" Relationship="Self.FK__Envio__IdMensaje__1920BF5C" FromRole="Envio" ToRole="Mensaje" />
+          <NavigationProperty Name="Usuario1" Relationship="Self.FK__Envio__Receptor__1BFD2C07" FromRole="Envio" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Mensaje">
+          <Key>
+            <PropertyRef Name="IdMensaje" />
+          </Key>
+          <Property Name="IdMensaje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Mensaje1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Envios" Relationship="Self.FK__Envio__IdMensaje__1920BF5C" FromRole="Mensaje" ToRole="Envio" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Conversacions" Relationship="Self.FK__Conversac__IdEmi__1367E606" FromRole="Usuario" ToRole="Conversacion" />
+          <NavigationProperty Name="Conversacions1" Relationship="Self.FK__Conversac__IdRec__1273C1CD" FromRole="Usuario" ToRole="Conversacion" />
+          <NavigationProperty Name="Envios" Relationship="Self.FK__Envio__Emisor__1B0907CE" FromRole="Usuario" ToRole="Envio" />
+          <NavigationProperty Name="Envios1" Relationship="Self.FK__Envio__Receptor__1BFD2C07" FromRole="Usuario" ToRole="Envio" />
+        </EntityType>
+        <Association Name="FK__Conversac__IdEmi__1367E606">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Conversacion" Type="Self.Conversacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Conversacion">
+              <PropertyRef Name="IdEmisor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Conversac__IdRec__1273C1CD">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Conversacion" Type="Self.Conversacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Conversacion">
+              <PropertyRef Name="IdReceptor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Envio__IdConvers__1A14E395">
+          <End Role="Conversacion" Type="Self.Conversacion" Multiplicity="0..1" />
+          <End Role="Envio" Type="Self.Envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversacion">
+              <PropertyRef Name="IdConversacion" />
+            </Principal>
+            <Dependent Role="Envio">
+              <PropertyRef Name="IdConversacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Envio__Emisor__1B0907CE">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Envio" Type="Self.Envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Envio">
+              <PropertyRef Name="Emisor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Envio__IdMensaje__1920BF5C">
+          <End Role="Mensaje" Type="Self.Mensaje" Multiplicity="0..1" />
+          <End Role="Envio" Type="Self.Envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mensaje">
+              <PropertyRef Name="IdMensaje" />
+            </Principal>
+            <Dependent Role="Envio">
+              <PropertyRef Name="IdMensaje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Envio__Receptor__1BFD2C07">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Envio" Type="Self.Envio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Envio">
+              <PropertyRef Name="Receptor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MensajeriaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Conversacions" EntityType="Self.Conversacion" />
+          <EntitySet Name="Envios" EntityType="Self.Envio" />
+          <EntitySet Name="Mensajes" EntityType="Self.Mensaje" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuario" />
+          <AssociationSet Name="FK__Conversac__IdEmi__1367E606" Association="Self.FK__Conversac__IdEmi__1367E606">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Conversacion" EntitySet="Conversacions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Conversac__IdRec__1273C1CD" Association="Self.FK__Conversac__IdRec__1273C1CD">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Conversacion" EntitySet="Conversacions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Envio__IdConvers__1A14E395" Association="Self.FK__Envio__IdConvers__1A14E395">
+            <End Role="Conversacion" EntitySet="Conversacions" />
+            <End Role="Envio" EntitySet="Envios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Envio__Emisor__1B0907CE" Association="Self.FK__Envio__Emisor__1B0907CE">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Envio" EntitySet="Envios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Envio__IdMensaje__1920BF5C" Association="Self.FK__Envio__IdMensaje__1920BF5C">
+            <End Role="Mensaje" EntitySet="Mensajes" />
+            <End Role="Envio" EntitySet="Envios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Envio__Receptor__1BFD2C07" Association="Self.FK__Envio__Receptor__1BFD2C07">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Envio" EntitySet="Envios" />
+          </AssociationSet>
+          <FunctionImport Name="AddUsusario">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="ApellidoPaterno" Mode="In" Type="String" />
+            <Parameter Name="ApellidoMaterno" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetEmail" ReturnType="Collection(MensajeriaModel.GetEmail_Result)">
+          <Parameter Name="Email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetByIdConversacionUsuario" ReturnType="Collection(MensajeriaModel.GetByIdConversacionUsuario_Result)">
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="BusquedaUsuario" ReturnType="Collection(MensajeriaModel.BusquedaUsuario_Result)">
+          <Parameter Name="Usuario" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddConversacion">
+            <Parameter Name="IdReceptor" Mode="In" Type="Int32" />
+            <Parameter Name="IdEmisor" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddMensaje">
+            <Parameter Name="Mensaje" Mode="In" Type="String" />
+            <Parameter Name="UltimoMensaje" Mode="In" Type="Int32" />
+            <Parameter Name="IdEmisor" Mode="In" Type="Int32" />
+            <Parameter Name="IdReceptor" Mode="In" Type="Int32" />
+            <Parameter Name="IdConversacion" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetByIdConversacioEnvios" ReturnType="Collection(MensajeriaModel.GetByIdConversacioEnvios_Result)">
+            <Parameter Name="IdConversacion" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="GetEmail_Result">
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="80" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="80" />
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetByIdConversacionUsuario_Result">
+          <Property Type="Int32" Name="IdConversacion" Nullable="false" />
+          <Property Type="Int32" Name="IdEmisor" Nullable="true" />
+          <Property Type="Int32" Name="IdReceptor" Nullable="true" />
+          <Property Type="String" Name="Emisor" Nullable="false" MaxLength="80" />
+          <Property Type="String" Name="Receptor" Nullable="false" MaxLength="80" />
+        </ComplexType>
+        <ComplexType Name="BusquedaUsuario_Result">
+          <Property Type="Int32" Name="IdUsuario" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="80" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="80" />
+        </ComplexType>
+        <ComplexType Name="GetByIdConversacioEnvios_Result">
+          <Property Type="Int32" Name="IdMensaje" Nullable="true" />
+          <Property Type="String" Name="Mensaje" Nullable="false" MaxLength="500" />
+          <Property Type="Int32" Name="Emisor" Nullable="true" />
+          <Property Type="Int32" Name="Receptor" Nullable="true" />
+          <Property Type="Int32" Name="IdConversacion" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MensajeriaModelStoreContainer" CdmEntityContainer="MensajeriaEntities">
+          <EntitySetMapping Name="Conversacions">
+            <EntityTypeMapping TypeName="MensajeriaModel.Conversacion">
+              <MappingFragment StoreEntitySet="Conversacion">
+                <ScalarProperty Name="IdConversacion" ColumnName="IdConversacion" />
+                <ScalarProperty Name="IdReceptor" ColumnName="IdReceptor" />
+                <ScalarProperty Name="IdEmisor" ColumnName="IdEmisor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Envios">
+            <EntityTypeMapping TypeName="MensajeriaModel.Envio">
+              <MappingFragment StoreEntitySet="Envio">
+                <ScalarProperty Name="IdEnvio" ColumnName="IdEnvio" />
+                <ScalarProperty Name="IdMensaje" ColumnName="IdMensaje" />
+                <ScalarProperty Name="IdConversacion" ColumnName="IdConversacion" />
+                <ScalarProperty Name="Emisor" ColumnName="Emisor" />
+                <ScalarProperty Name="Receptor" ColumnName="Receptor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mensajes">
+            <EntityTypeMapping TypeName="MensajeriaModel.Mensaje">
+              <MappingFragment StoreEntitySet="Mensaje">
+                <ScalarProperty Name="IdMensaje" ColumnName="IdMensaje" />
+                <ScalarProperty Name="Mensaje1" ColumnName="Mensaje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="MensajeriaModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
+                <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddUsusario" FunctionName="MensajeriaModel.Store.AddUsusario" />
+          <FunctionImportMapping FunctionImportName="GetEmail" FunctionName="MensajeriaModel.Store.GetEmail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MensajeriaModel.GetEmail_Result">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetByIdConversacionUsuario" FunctionName="MensajeriaModel.Store.GetByIdConversacionUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MensajeriaModel.GetByIdConversacionUsuario_Result">
+                <ScalarProperty Name="IdConversacion" ColumnName="IdConversacion" />
+                <ScalarProperty Name="IdEmisor" ColumnName="IdEmisor" />
+                <ScalarProperty Name="IdReceptor" ColumnName="IdReceptor" />
+                <ScalarProperty Name="Emisor" ColumnName="Emisor" />
+                <ScalarProperty Name="Receptor" ColumnName="Receptor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="BusquedaUsuario" FunctionName="MensajeriaModel.Store.BusquedaUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MensajeriaModel.BusquedaUsuario_Result">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AddConversacion" FunctionName="MensajeriaModel.Store.AddConversacion" />
+          <FunctionImportMapping FunctionImportName="AddMensaje" FunctionName="MensajeriaModel.Store.AddMensaje" />
+          <FunctionImportMapping FunctionImportName="GetByIdConversacioEnvios" FunctionName="MensajeriaModel.Store.GetByIdConversacioEnvios">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MensajeriaModel.GetByIdConversacioEnvios_Result">
+                <ScalarProperty Name="IdMensaje" ColumnName="IdMensaje" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="Emisor" ColumnName="Emisor" />
+                <ScalarProperty Name="Receptor" ColumnName="Receptor" />
+                <ScalarProperty Name="IdConversacion" ColumnName="IdConversacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

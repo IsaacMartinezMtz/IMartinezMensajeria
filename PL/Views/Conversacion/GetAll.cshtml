@@ -1,0 +1,118 @@
+﻿@model ML.Conversacion
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-lg-start">
+    <h2>Conversaciones</h2>
+    <h5>Listas de conversaciones  </h5>
+</div>
+<hr />
+<div class="list-group">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Nueva conversacion
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Usuarios</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form>
+                    <div class="form-group d-flex justify-content-center m-2">
+                        <input class="form-control" id="txtusuario" placeholder="Nombre de Usuario" />
+                    </div>
+                    <button type="button" class="btn btn-success m-1" id="btnUpdate" onclick="GetAllUsuario()">Buscar</button>
+                </form>
+                <!-- Tabla -->
+                <div class="modal-body">
+                    <div class="col-md-12">
+
+                        <table id="tablaEmpleado" class="table table-hover" border="1">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="text-center" scope="col">Nombre</th>
+                                    <th class="text-center" scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @if (Model.Conversaciones.Count == 0)
+    {
+        <div class="alert alert-primary " role="alert">
+            Inicia una conversacion
+        </div>
+    }
+    else
+    {
+        <a href="#" class="list-group-item list-group-item-action active" aria-current="true">Lista de conversaciones</a>
+        foreach (ML.Conversacion conversacion in Model.Conversaciones)
+        {
+
+            <a href="@Url.Action("GetMesnajes", "Envio", new {IdConversacion = conversacion.IdConversacion, IdUsuarioUno = conversacion.UsuarioUno.IdUsuario, IdUsuarioDos = conversacion.UsuarioDos.IdUsuario})" class="list-group-item list-group-item-action"> @conversacion.UsuarioConversacion </a>
+
+        }
+    }
+</div>
+
+
+
+@Scripts.Render("~/bundles/jquery")
+
+<script type="text/javascript">
+
+
+
+
+    function GetAllUsuario() {
+        var json = {
+            usuriosB: $('#txtusuario').val(),
+            }
+        $.ajax({
+            url: 'http://localhost:7254/Usuario/BusquedaUsuario/',
+            type: 'GET',
+            dataType: "json",
+            data: { usuarios: $('#txtusuario').val() },
+            success: function (result) {
+                console.log(result)
+                $('#tablaEmpleado tbody').empty();
+                $.each(result, function (i, usurio) {
+                    var usuarioId = usurio.IdUsuario; // Asegúrate de que esta variable está definida
+                    var url = '@Url.Action("Add", "Conversacion", new { IdUsuarioDos = "__id__"})';
+                        url = url.replace('__id__', usuarioId);
+                    var filas =
+                        '<tr>'
+                        + "<td  id='id' class='text-center'>" + usurio.Nombre + "</td>"
+                        + '<td class="text-center"> <a class="btn btn-success" href="' + url + '"><i class="fa-regular fa-message"></i></a></td>'
+                        + "</tr>";
+
+                    $("#tablaEmpleado tbody").append(filas);
+                    $('#txtusuario').val('');
+                });
+            },
+            error: function (result) {
+                alert('Error en la consulta.' + result.responseJSON.ErrorMessage); //es un error de JSON, y es porque puede venir vacio o null
+            }
+        });
+    };
+
+
+
+</script>
+

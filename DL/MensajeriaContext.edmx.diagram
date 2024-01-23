@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4577744deebb46878baa2b4a32b7b6a9" Name="Diagram1">
+        <EntityTypeShape EntityType="MensajeriaModel.Conversacion" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MensajeriaModel.Envio" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MensajeriaModel.Mensaje" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MensajeriaModel.Usuario" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="MensajeriaModel.FK__Conversac__IdEmi__1367E606" ManuallyRouted="false" />
+        <AssociationConnector Association="MensajeriaModel.FK__Conversac__IdRec__1273C1CD" ManuallyRouted="false" />
+        <AssociationConnector Association="MensajeriaModel.FK__Envio__IdConvers__1A14E395" ManuallyRouted="false" />
+        <AssociationConnector Association="MensajeriaModel.FK__Envio__Emisor__1B0907CE" ManuallyRouted="false" />
+        <AssociationConnector Association="MensajeriaModel.FK__Envio__IdMensaje__1920BF5C" ManuallyRouted="false" />
+        <AssociationConnector Association="MensajeriaModel.FK__Envio__Receptor__1BFD2C07" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "GetMesnajes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    body, html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        background-color: #D9EDBF;
+    }
+
+    #chatArea {
+        flex: 1;
+        overflow: auto;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        background-color: #FFFFEC;
+    }
+
+    #inputArea {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background-color: #F1E4C3;
+    }
+
+    #txtMensaje {
+        flex: 2;
+        margin-right: 10px;
+
+    }
+
+    #sendButton {
+        width: 100px;
+    }
+</style>
+
+<div id="chatArea">
+    <!-- Aquí se mostrarán los mensajes de la conversación -->
+    <ul id="listmensajes" class="list-group list-group-flush">
+    </ul>
+</div>
+
+<div id="inputArea">
+    <input type="text" id="txtMensaje" class="form-control" placeholder="Escribe tu mensaje aquí...">
+    <button id="send" onclick="Send()" class="btn btn-outline-success"><i class="fa-regular fa-paper-plane"></i></button>
+</div>
+@Scripts.Render("~/bundles/jquery")
+<script type="text/javascript">
+    $(document).ready(function () { //click
+        GetMesnajes();
+    });
+
+    function GetMesnajes() {
+
+         $.ajax({
+             url: 'http://localhost:7254/Envio/GetMensajes',
+            type: 'GET',
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                $('#listmensajes').empty();
+                $.each(result, function (i, mensaje) {
+                    var IdUsuarioSesion = '@(Convert.ToInt64(Session["IdUsuarioSesion"]))';
+                    if (mensaje.UsuarioEmisor.IdUsuario == IdUsuarioSesion) {
+                        var filas = "<li class='list-group-item ' style='width: 50%; margin-left: 545px; background-color: #C6A969;'>" + mensaje.Mensaje.Texto + "</li>";
+
+                    } else {
+                        var filas = "<li class='list-group-item ' style='width: 50%; float: left; background-color: #597E52;'>" + mensaje.Mensaje.Texto + "</li>";
+
+                    }
+                    $("#listmensajes").append(filas);
+
+                });
+            },
+            error: function (result) {
+                alert('Error en la consulta.' + result.responseJSON.ErrorMessage); //es un error de JSON, y es porque puede venir vacio o null
+            }
+        });
+    }
+
+    function Send() {
+
+
+        var json = {
+            Mensaje: {
+                Texto: $('#txtMensaje').val()
+            }
+        }
+        $.ajax({
+
+            url: 'http://localhost:7254/Envio/send',
+            type: 'POST',
+            datatype: 'JSON',
+            data: json,
+            success: function (result) {
+
+                GetMesnajes();
+                $('#txtMensaje').val('')
+            },
+            error: function (result) {
+                console.log(result);
+                alert('Error en la consulta.' + result.responseJSON.ErrorMessage); //es un error de JSON, y es porque puede venir vacio o null
+            }
+        });
+
+    }
+</script>
+
+
+
